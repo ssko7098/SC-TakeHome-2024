@@ -1,6 +1,7 @@
 package folder_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/georgechieng-sc/interns-2022/folder"
@@ -65,13 +66,49 @@ func Test_folder_MoveFolder(t *testing.T) {
 				{Name: "golf", Paths: "golf", OrgId: orgIDMap["org1"]},
 			},
 		},
-		// {
-		// 	name:    "Move bravo to charlie",
-		// 	srcName: "bravo",
-		// 	dstName: "charlie",
-		// 	folders: folders,
-		// 	want:    errors.New("cannot move a folder to a child of itself"),
-		// },
+		{
+			name:    "Move charlie to golf",
+			srcName: "charlie",
+			dstName: "golf",
+			folders: folders,
+			want: []folder.Folder{
+				{Name: "alpha", Paths: "alpha", OrgId: orgIDMap["org1"]},
+				{Name: "bravo", Paths: "alpha.bravo", OrgId: orgIDMap["org1"]},
+				{Name: "charlie", Paths: "golf.charlie", OrgId: orgIDMap["org1"]},
+				{Name: "delta", Paths: "alpha.delta", OrgId: orgIDMap["org1"]},
+				{Name: "echo", Paths: "alpha.delta.echo", OrgId: orgIDMap["org1"]},
+				{Name: "foxtrot", Paths: "foxtrot", OrgId: orgIDMap["org2"]},
+				{Name: "golf", Paths: "golf", OrgId: orgIDMap["org1"]},
+			},
+		},
+		{
+			name:    "Move bravo to charlie",
+			srcName: "bravo",
+			dstName: "charlie",
+			folders: folders,
+			want:    errors.New("cannot move a folder to a child of itself"),
+		},
+		{
+			name:    "Move bravo to bravo",
+			srcName: "bravo",
+			dstName: "bravo",
+			folders: folders,
+			want:    errors.New("cannot move a folder to itself"),
+		},
+		{
+			name:    "Move invalid folder to bravo",
+			srcName: "invalid_folder",
+			dstName: "bravo",
+			folders: folders,
+			want:    errors.New("source folder does not exist"),
+		},
+		{
+			name:    "Move bravo folder to invalid folder",
+			srcName: "bravo",
+			dstName: "invalid_folder",
+			folders: folders,
+			want:    errors.New("destination folder does not exist"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -37,11 +37,20 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 
 	// Move Logic
 	// Find the subtree (including the src as the root folder)
-	subtree := append([]Folder{srcFolder}, f.GetAllChildFolders(srcFolder.OrgId, name)...)
+	subtree := []Folder{srcFolder}
 
-	// Update each folder in the subtree with the new path
-	for i := range subtree {
-		subtree[i].Paths = findNewPath(subtree[i].Paths, dstFolder.Paths)
+	// Special case -> where the src Folder is a leaf node
+	// just change it's entire srcPath to the dstPath
+	if len(f.GetAllChildFolders(srcFolder.OrgId, name)) == 0 {
+		subtree[0].Paths = dstFolder.Paths + "." + srcFolder.Name
+
+	} else {
+		subtree = append(subtree, f.GetAllChildFolders(srcFolder.OrgId, name)...)
+
+		// Update each folder in the subtree with the new path
+		for i := range subtree {
+			subtree[i].Paths = findNewPath(subtree[i].Paths, dstFolder.Paths)
+		}
 	}
 
 	// integrates the subtree's updated paths with the rest of the folders
@@ -75,7 +84,7 @@ func findNewPath(srcPath, dstPath string) string {
 		i++
 	}
 
-	// special case where dst source is a root folder
+	// special case where dst folder is a root folder
 	if i == len(srcParts) || i == len(dstParts) {
 		i = 0
 	}
