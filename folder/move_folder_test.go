@@ -82,6 +82,21 @@ func Test_folder_MoveFolder(t *testing.T) {
 			},
 		},
 		{
+			name:    "Move alpha to golf",
+			srcName: "alpha",
+			dstName: "golf",
+			folders: folders,
+			want: []folder.Folder{
+				{Name: "alpha", Paths: "golf.alpha", OrgId: orgIDMap["org1"]},
+				{Name: "bravo", Paths: "golf.alpha.bravo", OrgId: orgIDMap["org1"]},
+				{Name: "charlie", Paths: "golf.alpha.bravo.charlie", OrgId: orgIDMap["org1"]},
+				{Name: "delta", Paths: "golf.alpha.delta", OrgId: orgIDMap["org1"]},
+				{Name: "echo", Paths: "golf.alpha.delta.echo", OrgId: orgIDMap["org1"]},
+				{Name: "foxtrot", Paths: "foxtrot", OrgId: orgIDMap["org2"]},
+				{Name: "golf", Paths: "golf", OrgId: orgIDMap["org1"]},
+			},
+		},
+		{
 			name:    "Move bravo to charlie",
 			srcName: "bravo",
 			dstName: "charlie",

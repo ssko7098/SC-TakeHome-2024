@@ -37,20 +37,10 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 
 	// Move Logic
 	// Find the subtree (including the src as the root folder)
-	subtree := []Folder{srcFolder}
+	subtree := append([]Folder{srcFolder}, f.GetAllChildFolders(srcFolder.OrgId, name)...)
 
-	// Special case -> where the src Folder is a leaf node
-	// just change it's entire srcPath to the dstPath
-	if len(f.GetAllChildFolders(srcFolder.OrgId, name)) == 0 {
-		subtree[0].Paths = dstFolder.Paths + "." + srcFolder.Name
-
-	} else {
-		subtree = append(subtree, f.GetAllChildFolders(srcFolder.OrgId, name)...)
-
-		// Update each folder in the subtree with the new path
-		for i := range subtree {
-			subtree[i].Paths = findNewPath(subtree[i].Paths, dstFolder.Paths)
-		}
+	for i := range subtree {
+		subtree[i].Paths = findNewPath(subtree[i].Paths, dstFolder.Paths, name)
 	}
 
 	// integrates the subtree's updated paths with the rest of the folders
@@ -72,30 +62,26 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 }
 
 // constructs a new path by replacing the root of the subtree with dstPath.
-func findNewPath(srcPath, dstPath string) string {
+func findNewPath(srcPath, dstPath, name string) string {
 
 	// Split the paths into segments by "."
 	srcParts := strings.Split(srcPath, ".")
 	dstParts := strings.Split(dstPath, ".")
 
-	// Find where the paths diverge
-	i := 0
-	for i < len(srcParts) && i < len(dstParts) && srcParts[i] != dstParts[i] {
-		if i == 0 {
-			// special case where dst folder is a root folder
+	// Find the index of the root of the subtree in the source path
+	// (i.e., find the index of name)
+	var index int
+	for i, part := range srcParts {
+		if part == name {
+			index = i - 1
 			break
 		}
-
-		i++
 	}
 
-	// Construct the new path with dstPath + remaining srcPath
-	result := strings.Join(dstParts, ".")
-
-	// Append any remaining part of srcPath after the point of divergence
-	if len(srcParts) > i {
-		result += "." + strings.Join(srcParts[i+1:], ".")
-	}
+	// Replace the source path up to the name with the destination path
+	// Concatenate dstParts with the remaining parts of srcParts after "name"
+	newPathParts := append(dstParts, srcParts[index+1:]...)
+	result := strings.Join(newPathParts, ".")
 
 	return result
 }
