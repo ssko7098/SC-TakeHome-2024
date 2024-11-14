@@ -44,30 +44,22 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 		subtree[i].Paths = findNewPath(subtree[i].Paths, dstFolder.Paths)
 	}
 
-	// Update the paths in the main folders slice to reflect the updated subtree
-	updatedPaths := make(map[string]string) // key: folder name, value: new path
-	for _, folder := range subtree {
-		updatedPaths[folder.Name] = folder.Paths
-	}
-
-	for i := range f.folders {
-		if newPath, exists := updatedPaths[f.folders[i].Name]; exists {
-			f.folders[i].Paths = newPath
-		}
-	}
-
-	// integrates the subtree's updated paths into the main folders slice
+	// integrates the subtree's updated paths with the rest of the folders
 	subtreeMap := make(map[string]string) // Map folder name to new path
 	for _, folder := range subtree {
 		subtreeMap[folder.Name] = folder.Paths
 	}
+
+	res := []Folder{}
 	for i := range f.folders {
+		res = append(res, f.folders[i])
+
 		if newPath, exists := subtreeMap[f.folders[i].Name]; exists {
-			f.folders[i].Paths = newPath
+			res[i].Paths = newPath
 		}
 	}
 
-	return f.folders, nil
+	return res, nil
 }
 
 // constructs a new path by replacing the root of the subtree with dstPath.
