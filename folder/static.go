@@ -18,13 +18,13 @@ import (
 // If you do make changes here, be ready to discuss why these changes were made.
 
 // how many trees you want to generate
-const MaxRootSet = 4
+const MaxRootSet = 3
 
 // maximum possible children per node
-const MaxChild = 4
+const MaxChild = 3
 
 // max depth of the tree
-const MaxDepth = 5
+const MaxDepth = 3
 
 // the default orgID that we will be using for testing
 const DefaultOrgID = "c1556e17-b7c0-45a3-a6ae-9546248fb17a"

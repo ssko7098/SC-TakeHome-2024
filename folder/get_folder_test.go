@@ -8,56 +8,50 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Custom UUID mappings for simplicity
-var orgIDMap = map[string]uuid.UUID{
-	"org1": uuid.Must(uuid.NewV4()),
-	"org2": uuid.Must(uuid.NewV4()),
-}
-
-// Sample folder data shared across tests
-var folders = []folder.Folder{
-	{Name: "alpha", Paths: "alpha", OrgId: orgIDMap["org1"]},
-	{Name: "bravo", Paths: "alpha.bravo", OrgId: orgIDMap["org1"]},
-	{Name: "charlie", Paths: "alpha.bravo.charlie", OrgId: orgIDMap["org1"]},
-	{Name: "delta", Paths: "alpha.delta", OrgId: orgIDMap["org1"]},
-	{Name: "echo", Paths: "echo", OrgId: orgIDMap["org1"]},
-	{Name: "foxtrot", Paths: "foxtrot", OrgId: orgIDMap["org2"]},
-}
-
 // feel free to change how the unit test is structured
 func Test_folder_GetFoldersByOrgID(t *testing.T) {
 	t.Parallel()
 
 	tests := [...]struct {
-		name    string
-		orgID   uuid.UUID
-		folders []folder.Folder
-		want    []folder.Folder
+		name  string
+		orgID uuid.UUID
+		want  []folder.Folder
 	}{
 		{
-			name:    "Retrieve all folders in org1",
-			orgID:   orgIDMap["org1"],
-			folders: folders,
+			name:  "Retrieve all folders in org1",
+			orgID: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"),
 			want: []folder.Folder{
-				{Name: "alpha", Paths: "alpha", OrgId: orgIDMap["org1"]},
-				{Name: "bravo", Paths: "alpha.bravo", OrgId: orgIDMap["org1"]},
-				{Name: "charlie", Paths: "alpha.bravo.charlie", OrgId: orgIDMap["org1"]},
-				{Name: "delta", Paths: "alpha.delta", OrgId: orgIDMap["org1"]},
-				{Name: "echo", Paths: "echo", OrgId: orgIDMap["org1"]},
+				{Name: "capable-baroness", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness"},
+				{Name: "expert-buttercup", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.expert-buttercup"},
+				{Name: "picked-forerunner", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.expert-buttercup.picked-forerunner"},
+				{Name: "finer-witchblade", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.finer-witchblade"},
+				{Name: "magnetic-jungle", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.finer-witchblade.magnetic-jungle"},
+				{Name: "quick-cornelius", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.quick-cornelius"},
+				{Name: "healthy-mongoose", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.quick-cornelius.healthy-mongoose"},
 			},
 		},
 		{
-			name:    "Retrieve all folders in org2",
-			orgID:   orgIDMap["org2"],
-			folders: folders,
+			name:  "Retrieve all folders in org2",
+			orgID: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"),
 			want: []folder.Folder{
-				{Name: "foxtrot", Paths: "foxtrot", OrgId: orgIDMap["org2"]},
+				{Name: "discrete-manta", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta"},
+				{Name: "topical-raphael", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.topical-raphael"},
+				{Name: "choice-flash", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.topical-raphael.choice-flash"},
+				{Name: "valid-vindicator", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator"},
+				{Name: "summary-epoch", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator.summary-epoch"},
+				{Name: "flying-gambit", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator.flying-gambit"},
+				{Name: "wanted-talisman", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator.wanted-talisman"},
+				{Name: "cheerful-horridus", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "cheerful-horridus"},
+				{Name: "sterling-the-leader", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "cheerful-horridus.sterling-the-leader"},
+				{Name: "grown-wallop", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "cheerful-horridus.sterling-the-leader.grown-wallop"},
+				{Name: "creative-microbe", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "cheerful-horridus.sterling-the-leader.creative-microbe"},
+				{Name: "meet-sauron", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "cheerful-horridus.sterling-the-leader.meet-sauron"},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := folder.NewDriver(tt.folders)
+			f := folder.NewDriver(folder.GetAllFolders())
 			got := f.GetFoldersByOrgID(tt.orgID)
 
 			assert.Equal(t, tt.want, got)
@@ -73,55 +67,42 @@ func Test_folder_GetAllChildFolders(t *testing.T) {
 		name       string
 		orgID      uuid.UUID
 		folderName string
-		folders    []folder.Folder
 		want       []folder.Folder
 	}{
 		{
-			name:       "Get children of 'alpha' in org1",
-			orgID:      orgIDMap["org1"],
-			folderName: "alpha",
-			folders:    folders,
+			name:       "Retrieve children of expert-buttercup in org1",
+			orgID:      uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"),
+			folderName: "expert-buttercup",
 			want: []folder.Folder{
-				{Name: "bravo", Paths: "alpha.bravo", OrgId: orgIDMap["org1"]},
-				{Name: "charlie", Paths: "alpha.bravo.charlie", OrgId: orgIDMap["org1"]},
-				{Name: "delta", Paths: "alpha.delta", OrgId: orgIDMap["org1"]},
+				{Name: "picked-forerunner", OrgId: uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"), Paths: "capable-baroness.expert-buttercup.picked-forerunner"},
 			},
 		},
 		{
-			name:       "Get children of 'bravo' in org1",
-			orgID:      orgIDMap["org1"],
-			folderName: "bravo",
-			folders:    folders,
+			name:       "Retrieve children of valid-vindicator in org2",
+			orgID:      uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"),
+			folderName: "valid-vindicator",
 			want: []folder.Folder{
-				{Name: "charlie", Paths: "alpha.bravo.charlie", OrgId: orgIDMap["org1"]},
+				{Name: "summary-epoch", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator.summary-epoch"},
+				{Name: "flying-gambit", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator.flying-gambit"},
+				{Name: "wanted-talisman", OrgId: uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"), Paths: "discrete-manta.valid-vindicator.wanted-talisman"},
 			},
 		},
 		{
-			name:       "Get children of 'charlie' in org1",
-			orgID:      orgIDMap["org1"],
-			folderName: "charlie",
-			folders:    folders,
-			want:       []folder.Folder{},
-		},
-		{
-			name:       "Get children of 'echo' in org1",
-			orgID:      orgIDMap["org1"],
-			folderName: "echo",
-			folders:    folders,
+			name:       "Retrieve children of leaf folder",
+			orgID:      uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"),
+			folderName: "summary-epoch",
 			want:       []folder.Folder{},
 		},
 		{
 			name:       "Folder does not exist",
-			orgID:      orgIDMap["org1"],
+			orgID:      uuid.FromStringOrNil("97044613-96ab-442c-9f08-a9b09f04933c"),
 			folderName: "invalidFolder",
-			folders:    folders,
 			want:       nil,
 		},
 		{
 			name:       "Folder does not exist in specified organisation",
-			orgID:      orgIDMap["org1"],
-			folderName: "foxtrot",
-			folders:    folders,
+			orgID:      uuid.FromStringOrNil("c1556e17-b7c0-45a3-a6ae-9546248fb17a"),
+			folderName: "magnetic-jungle",
 			want:       nil,
 		},
 	}
@@ -129,7 +110,7 @@ func Test_folder_GetAllChildFolders(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create a driver instance with the test folder data
-			f := folder.NewDriver(tt.folders)
+			f := folder.NewDriver(folder.GetAllFolders())
 
 			got := f.GetAllChildFolders(tt.orgID, tt.folderName)
 
