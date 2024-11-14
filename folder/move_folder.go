@@ -73,14 +73,14 @@ func findNewPath(srcPath, dstPath, name string) string {
 	var index int
 	for i, part := range srcParts {
 		if part == name {
-			index = i - 1
+			index = i
 			break
 		}
 	}
 
 	// Replace the source path up to the name with the destination path
 	// Concatenate dstParts with the remaining parts of srcParts after "name"
-	newPathParts := append(dstParts, srcParts[index+1:]...)
+	newPathParts := append(dstParts, srcParts[index:]...)
 	result := strings.Join(newPathParts, ".")
 
 	return result
