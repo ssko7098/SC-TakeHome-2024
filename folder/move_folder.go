@@ -81,12 +81,12 @@ func findNewPath(srcPath, dstPath string) string {
 	// Find where the paths diverge
 	i := 0
 	for i < len(srcParts) && i < len(dstParts) && srcParts[i] != dstParts[i] {
-		i++
-	}
+		if i == 0 {
+			// special case where dst folder is a root folder
+			break
+		}
 
-	// special case where dst folder is a root folder
-	if i == len(srcParts) || i == len(dstParts) {
-		i = 0
+		i++
 	}
 
 	// Construct the new path with dstPath + remaining srcPath
